@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+<th:block th:replace="~{layout/basic :: setContent(~{this::content})}">
 
     <th:block th:fragment="content">
 
-        <link th:href="@{/vendor/abcjs/abcjs-audio.css}" media="all" rel="stylesheet" type="text/css" />
-        <script th:src="@{/vendor/abcjs/abcjs-basic-min.js}"></script>
+        <link th:href="@{vendor/abcjs/abcjs-audio.css}" media="all" rel="stylesheet" type="text/css" />
+        <script th:src="@{vendor/abcjs/abcjs-basic-min.js}"></script>
 
         <script th:inline="javascript">
 
