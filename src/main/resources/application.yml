@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active: "local"
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+---
+
+spring:
+  profiles:
+    group:
+      "local": "dev-db"
+  jpa:
+    show-sql: true
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+---
+
+spring:
+  profiles:
+    group:
+      "dev": "dev-db"
+  jpa:
+    show-sql: true
+    database: "mysql"
+
+
+---
+
+spring:
+  profiles:
+    group:
+      "prod": "prod-db"
+  jpa:
+    show-sql: true
+    database: "mysql"

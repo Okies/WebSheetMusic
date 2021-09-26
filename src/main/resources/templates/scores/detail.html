@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+
+        <link th:href="@{/vendor/abcjs/abcjs-audio.css}" media="all" rel="stylesheet" type="text/css" />
+        <script th:src="@{/vendor/abcjs/abcjs-basic-min.js}"></script>
+
+        <script th:inline="javascript">
+
+        $(document).ready(function load() {
+            var cursorControl = { }; // see section on CursorControl
+            var abc = $('#abc').text();
+            var abcOptions = { add_classes: true };
+            var audioParams = { chordsOff: true };
+
+            if (ABCJS.synth.supportsAudio()) {
+                var synthControl = new ABCJS.synth.SynthController();
+                synthControl.load("#audio",
+                    cursorControl,
+                    {
+                        displayLoop: true,
+                        displayRestart: true,
+                        displayPlay: true,
+                        displayProgress: true,
+                        displayWarp: true
+                    }
+                );
+
+                var visualObj = ABCJS.renderAbc("paper",
+                    abc, abcOptions);
+                var createSynth = new ABCJS.synth.CreateSynth();
+                createSynth.init({ visualObj: visualObj[0] }).then(function () {
+                    synthControl.setTune(visualObj[0], false, audioParams).then(function () {
+                        console.log("Audio successfully loaded.")
+                    }).catch(function (error) {
+                        console.warn("Audio problem:", error);
+                    });
+                }).catch(function (error) {
+                    console.warn("Audio problem:", error);
+                });
+            } else {
+                document.querySelector("#audio").innerHTML =
+                    "Audio is not supported in this browser.";
+            }
+        });
+        </script>
+
+        <textarea name="abc" id="abc" cols="80" rows="12" spellcheck="false" th:text="${score.notation}"></textarea>
+
+        <div id="paper" class="paper"></div>
+
+        <div id="audio"></div>
+
+    </th:block>
+
+</th:block>
+
+</html>
