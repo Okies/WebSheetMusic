@@ -24,7 +24,7 @@ public class ScoreController {
 
         model.addAttribute("scores", scoreService.findAll());
 
-        return "scores/list";
+        return "/scores/list";
     }
 
     @GetMapping("/{sid}")
@@ -34,7 +34,7 @@ public class ScoreController {
 
         model.addAttribute("score", scoreService.findById(sid));
 
-        return "scores/detail";
+        return "/scores/detail";
     }
 
     @GetMapping("/new")
