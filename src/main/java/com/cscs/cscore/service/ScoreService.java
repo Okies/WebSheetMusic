@@ -14,4 +14,6 @@ public interface ScoreService {
     ScoreResponseDTO save(ScoreRequestDTO dto);
 
     ScoreResponseDTO findById(Long sid);
+
+    ScoreResponseDTO update(Long sid, ScoreRequestDTO dto);
 }

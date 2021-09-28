@@ -43,4 +43,16 @@ public class ScoreServiceImpl implements ScoreService{
                 .entity(scoreRepository.save(dto.toEntity()))
                 .build();
     }
+
+    @Override
+    public ScoreResponseDTO update(Long sid, ScoreRequestDTO dto) {
+
+        Score score = scoreRepository.findById(sid).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다." + sid));
+
+        score.update(dto.getTitle(), dto.getNotation(), dto.getWriter());
+
+        return ScoreResponseDTO.builder()
+                .entity(scoreRepository.save(score))
+                .build();
+    }
 }

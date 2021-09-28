@@ -32,4 +32,14 @@ public class Score extends BaseEntity{
     public void changeNotation(String notation) {
         this.notation = notation;
     }
+
+    public void changeWriter(String writer) {
+        this.writer = writer;
+    }
+
+    public void update(String title, String notation, String writer) {
+        this.title = title;
+        this.notation = notation;
+        this.writer = writer;
+    }
 }

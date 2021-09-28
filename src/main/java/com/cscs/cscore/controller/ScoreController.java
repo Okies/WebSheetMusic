@@ -47,8 +47,26 @@ public class ScoreController {
 
         log.info("save...", requestDTO.toString());
 
-
-
         return scoreService.save(requestDTO);
+    }
+
+    @GetMapping("/{sid}/modify")
+    public String getModyfyPage(@PathVariable Long sid, Model model) {
+
+        log.info("getScore... sid : " + sid);
+
+        model.addAttribute("score", scoreService.findById(sid));
+
+        return "scores/modify";
+
+    }
+
+    @PutMapping("/{sid}")
+    @ResponseBody
+    public ScoreResponseDTO update(@PathVariable Long sid, @RequestBody ScoreRequestDTO requestDTO) {
+
+        log.info("update..." + requestDTO.toString());
+
+        return scoreService.update(sid, requestDTO);
     }
 }

@@ -21,16 +21,15 @@
                 synthControl.load("#audio",
                     cursorControl,
                     {
-                        displayLoop: true,
+                        displayLoop: false,
                         displayRestart: true,
                         displayPlay: true,
                         displayProgress: true,
-                        displayWarp: true
+                        displayWarp: false
                     }
                 );
 
-                var visualObj = ABCJS.renderAbc("paper",
-                    abc, abcOptions);
+                var visualObj = ABCJS.renderAbc("paper", abc, abcOptions);
                 var createSynth = new ABCJS.synth.CreateSynth();
                 createSynth.init({ visualObj: visualObj[0] }).then(function () {
                     synthControl.setTune(visualObj[0], false, audioParams).then(function () {
@@ -48,11 +47,31 @@
         });
         </script>
 
-        <textarea name="abc" id="abc" cols="80" rows="12" spellcheck="false" th:text="${score.notation}"></textarea>
+        <a th:href="@{${score.sid} + '/modify'}"><button type="button" class="btn btn-primary">Modify</button></a>
 
-        <div id="paper" class="paper"></div>
+        <div class="row">
 
-        <div id="audio"></div>
+            <div class="col">
+
+                <textarea name="abc" id="abc" rows="20" style="width:100%;" spellcheck="false" th:text="${score.notation}"></textarea>
+
+                <div id="audio"></div>
+
+            </div>
+
+            <div class="col">
+
+                <div id="paper" class="paper"></div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
 
     </th:block>
 
