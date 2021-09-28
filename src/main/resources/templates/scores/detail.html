@@ -5,15 +5,15 @@
 
     <th:block th:fragment="content">
 
-        <link th:href="@{vendor/abcjs/abcjs-audio.css}" media="all" rel="stylesheet" type="text/css" />
-        <script th:src="@{vendor/abcjs/abcjs-basic-min.js}"></script>
+        <link th:href="@{/vendor/abcjs/abcjs-audio.css}" media="all" rel="stylesheet" type="text/css" />
+        <script th:src="@{/vendor/abcjs/abcjs-basic-min.js}"></script>
 
         <script th:inline="javascript">
 
         $(document).ready(function load() {
             var cursorControl = { }; // see section on CursorControl
             var abc = $('#abc').text();
-            var abcOptions = { add_classes: true };
+            var abcOptions = { add_classes: true , responsive: "resize"};
             var audioParams = { chordsOff: true };
 
             if (ABCJS.synth.supportsAudio()) {
@@ -61,7 +61,7 @@
 
             <div class="col">
 
-                <div id="paper" class="paper"></div>
+                <div id="paper" class="paper" style="width:100%;"></div>
 
             </div>
 
