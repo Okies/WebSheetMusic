@@ -184,3 +184,10 @@
 .abcjs-css-warning {
 	display: none;
 }
+
+.abcjs-highlight {
+fill: #0a9ecc;
+}
+.abcjs-cursor {
+stroke: red;
+}
