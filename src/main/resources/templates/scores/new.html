@@ -44,7 +44,7 @@
                     dataType : 'json',
                     contentType : 'application/json',
                     success: function(result) {
-                        location.href="/scores";
+                        location.href="/scores/" + result.sid;
                     },
                     error : function(result) {
                         alert("등록에 실패하였습니다.");

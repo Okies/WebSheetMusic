@@ -8,6 +8,7 @@ import com.cscs.cscore.entity.Score;
 import com.cscs.cscore.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class ScoreServiceImpl implements ScoreService{
 
     @Override
     public List<ScoresResponseDTO> findAll() {
-        return scoreRepository.findAll().stream()
+        return scoreRepository.findAll(Sort.by(Sort.Direction.DESC, "sid")).stream()
                 .map(ScoresResponseDTO::new)
                 .collect(Collectors.toList());
     }
