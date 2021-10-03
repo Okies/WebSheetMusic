@@ -5,33 +5,171 @@
 
     <th:block th:fragment="content">
 
-        <h1 class="mt-4">Score Register Page</h1>
+        <link th:href="@{/vendor/abcjs/abcjs-audio.css}" media="all" rel="stylesheet" type="text/css" />
+        <script th:src="@{/vendor/abcjs/abcjs-basic-min.js}"></script>
 
-        <form onsubmit="return false;">
-            <div class="form-group">
+        <script th:inline="javascript">
+
+        $(document).ready(function () {
+
+            function render(note) {
+                function CursorControl(rootSelector) {
+                    var self = this;
+
+                // This demonstrates two methods of indicating where the music is.
+                    // 1) An element is created that is moved along for each note.
+                    // 2) The currently being played note is given a class so that it can be transformed.
+                    self.cursor = null; // This is the svg element that will move with the music.
+                    self.rootSelector = rootSelector; // This is the same selector as the renderAbc call uses.
+
+                    self.onStart = function() {
+                        // This is called when the timer starts so we know the svg has been drawn by now.
+                        // Create the cursor and add it to the sheet music's svg.
+                        var svg = document.querySelector(self.rootSelector + " svg");
+                        self.cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        self.cursor.setAttribute("class", "abcjs-cursor");
+                        self.cursor.setAttributeNS(null, 'x1', 0);
+                        self.cursor.setAttributeNS(null, 'y1', 0);
+                        self.cursor.setAttributeNS(null, 'x2', 0);
+                        self.cursor.setAttributeNS(null, 'y2', 0);
+                        svg.appendChild(self.cursor);
+                    };
+
+                    self.removeSelection = function() {
+                        // Unselect any previously selected notes.
+                        var lastSelection = document.querySelectorAll(self.rootSelector + " .abcjs-highlight");
+                        for (var k = 0; k < lastSelection.length; k++)
+                            lastSelection[k].classList.remove("abcjs-highlight");
+                    };
+
+
+                    self.onEvent = function(ev) {
+
+                        // This is called every time a note or a rest is reached and contains the coordinates of it.
+                        if (ev.measureStart && ev.left === null)
+                            return; // this was the second part of a tie across a measure line. Just ignore it.
+
+                        self.removeSelection();
+
+                        // Select the currently selected notes.
+                        for (var i = 0; i < ev.elements.length; i++ ) {
+                            var note = ev.elements[i];
+                            for (var j = 0; j < note.length; j++) {
+                                note[j].classList.add("abcjs-highlight");
+                            }
+                        }
+
+                        // Move the cursor to the location of the current note.
+                        if (self.cursor) {
+                            self.cursor.setAttribute("x1", ev.left - 2);
+                            self.cursor.setAttribute("x2", ev.left - 2);
+                            self.cursor.setAttribute("y1", ev.top);
+                            self.cursor.setAttribute("y2", ev.top + ev.height);
+                        }
+
+
+
+                    };
+                    self.onFinished = function() {
+                            self.removeSelection();
+
+                        if (self.cursor) {
+                            self.cursor.setAttribute("x1", 0);
+                            self.cursor.setAttribute("x2", 0);
+                            self.cursor.setAttribute("y1", 0);
+                            self.cursor.setAttribute("y2", 0);
+                        }
+
+
+                    };
+                }
+
+                var cursorControl = new CursorControl("#paper"); // see section on CursorControl
+                var abc = !note ? $('#notation').text() : note;
+                var abcOptions = { add_classes: true , responsive: "resize"};
+                var audioParams = { chordsOff: true };
+
+                if (ABCJS.synth.supportsAudio()) {
+                    var synthControl = new ABCJS.synth.SynthController();
+                    synthControl.load("#audio",
+                        cursorControl,
+                        {
+                            displayLoop: false,
+                            displayRestart: true,
+                            displayPlay: true,
+                            displayProgress: true,
+                            displayWarp: false
+                        }
+                    );
+
+                    var visualObj = ABCJS.renderAbc("paper", abc, abcOptions);
+                    var createSynth = new ABCJS.synth.CreateSynth();
+                    createSynth.init({ visualObj: visualObj[0] }).then(function () {
+                        synthControl.setTune(visualObj[0], false, audioParams).then(function () {
+                            console.log("Audio successfully loaded.")
+                        }).catch(function (error) {
+                            console.warn("Audio problem:", error);
+                        });
+                    }).catch(function (error) {
+                        console.warn("Audio problem:", error);
+                    });
+                } else {
+                    document.querySelector("#audio").innerHTML =
+                        "Audio is not supported in this browser.";
+                }
+            }
+
+            var oldVal;
+            $('#notation').on('propertychange change keyup paste input', function() {
+                render($(this).val());
+            });
+
+            render();
+        });
+
+        </script>
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary m-2" onclick="save()">Save</button>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 m-1 form-group">
                 <label>Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title">
+                <input type="text" class="form-control" name="title" id="title" style="width:50%;" placeholder="Enter Title">
             </div>
+        </div>
 
-            <div class="form-group">
-                <label>Content</label>
-                <textarea class="form-control" name="content" id="content"></textarea>
-            </div>
-
-            <div class="form-group">
+        <div class="row">
+            <div class="col-sm-6 m-1 form-group">
                 <label>Writer</label>
-                <input type="text" class="form-control" name="writer" id="writer" placeholder="Enter Writer">
+                <input type="text" class="form-control" name="writer" id="writer" style="width:50%;" placeholder="Enter Writer">
+            </div>
+        </div>
+
+        <label>Notation</label>
+        <div class="row">
+            <div class="col-sm m-1">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <textarea class="form-control" name="notation" id="notation" rows="20" style="width:100%;" spellcheck="false"></textarea>
+                    </div>
+
+                    <div id="audio"></div>
+
+                </form>
             </div>
 
-            <button class="btn btn-primary" onclick="save()">Submit</button>
-
-        </form>
+            <div class="col-sm border border-3 m-1">
+                <div id="paper" class="paper" style="width:100%;"></div>
+            </div>
+        </div>
 
         <script>
             function save() {
                 var requestDTO = {
                     "title" : $('#title').val(),
-                    "notation" : $('#content').val(),
+                    "notation" : $('#notation').val(),
                     "writer" : $('#writer').val()
                 }
 
