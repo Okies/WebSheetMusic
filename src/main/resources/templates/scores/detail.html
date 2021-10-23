@@ -12,7 +12,7 @@
 
         $(document).ready(function load() {
 
-            function render() {
+            function render(note) {
                 function CursorControl(rootSelector) {
                     var self = this;
 
@@ -85,7 +85,7 @@
                 }
 
                 var cursorControl = new CursorControl("#paper"); // see section on CursorControl
-                var abc = $('#abc').text();
+                var abc = !note ? $('#abc').text() : note;
                 var abcOptions = { add_classes: true };
                 var audioParams = { chordsOff: true };
 
@@ -119,7 +119,7 @@
                 }
             }
 
-            render();
+            render([[${score.notation}]]);
         });
         </script>
 
@@ -130,18 +130,18 @@
 
         <div class="row">
 
-            <div class="col-sm m-1">
-
-                <textarea name="abc" id="abc" rows="20" style="width:100%;" spellcheck="false" th:text="${score.notation}"></textarea>
-
-                <div id="audio"></div>
-
-            </div>
-
-            <div class="col-sm border border-3 m-1">
+            <div class="col-sm border border-3 m-1 text-center">
 
                 <div id="paper" class="paper" style="width:100%;"></div>
 
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm m-1 text-center">
+                <div id="audio"></div>
             </div>
 
         </div>
