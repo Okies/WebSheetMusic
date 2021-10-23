@@ -86,7 +86,7 @@
 
                 var cursorControl = new CursorControl("#paper"); // see section on CursorControl
                 var abc = !note ? $('#notation').text() : note;
-                var abcOptions = { add_classes: true };
+                var abcOptions = { add_classes: true, responsive: "resize"};
                 var audioParams = { chordsOff: true };
 
                 if (ABCJS.synth.supportsAudio()) {
