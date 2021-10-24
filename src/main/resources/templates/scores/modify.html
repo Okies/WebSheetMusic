@@ -176,7 +176,7 @@
                 console.log(requestDTO);
 
                 $.ajax({
-                    url : "/scores/" + [[${score.sid}]],
+                    url : "/api/v1/scores/" + [[${score.sid}]],
                     data : JSON.stringify(requestDTO),
                     type : "PUT",
                     dataType : 'json',

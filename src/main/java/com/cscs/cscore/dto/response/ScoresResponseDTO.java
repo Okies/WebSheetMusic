@@ -13,7 +13,6 @@ public class ScoresResponseDTO {
 
     private Long sid;
     private String title;
-    private String notation;
     private String writer;
     private LocalDateTime regDate, modDate;
 
@@ -21,7 +20,6 @@ public class ScoresResponseDTO {
     public ScoresResponseDTO(Score entity) {
         this.sid = entity.getSid();;
         this.title = entity.getTitle();
-        this.notation = entity.getNotation();
         this.writer = entity.getWriter();
         this.regDate = entity.getRegDate();
         this.modDate = entity.getModDate();

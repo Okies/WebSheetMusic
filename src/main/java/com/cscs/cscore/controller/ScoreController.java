@@ -1,44 +1,37 @@
 package com.cscs.cscore.controller;
 
-import com.cscs.cscore.dto.ScoreDTO;
 import com.cscs.cscore.dto.request.ScoreRequestDTO;
 import com.cscs.cscore.dto.response.ScoreResponseDTO;
+import com.cscs.cscore.dto.response.ScoresResponseDTO;
 import com.cscs.cscore.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/scores")
-@Controller
+@RequestMapping("/api/v1/scores")
+@RestController
 public class ScoreController {
 
     private final ScoreService scoreService;
 
     @GetMapping({"", "/"})
-    public String getScores(Model model) {
+    public List<ScoresResponseDTO> getScores() {
 
-        model.addAttribute("scores", scoreService.findAll());
+        return scoreService.findAll();
 
-        return "scores/list";
     }
 
     @GetMapping("/{sid}")
-    public String getScore(@PathVariable Long sid, Model model) {
+    public ScoreResponseDTO getScore(@PathVariable Long sid, Model model) {
 
         log.info("getScore... sid : " + sid);
 
-        model.addAttribute("score", scoreService.findById(sid));
-
-        return "scores/detail";
-    }
-
-    @GetMapping("/new")
-    public void newScore() {
-
+        return scoreService.findById(sid);
     }
 
     @PostMapping()
@@ -48,17 +41,6 @@ public class ScoreController {
         log.info("save...", requestDTO.toString());
 
         return scoreService.save(requestDTO);
-    }
-
-    @GetMapping("/{sid}/modify")
-    public String getModyfyPage(@PathVariable Long sid, Model model) {
-
-        log.info("getScore... sid : " + sid);
-
-        model.addAttribute("score", scoreService.findById(sid));
-
-        return "scores/modify";
-
     }
 
     @PutMapping("/{sid}")
