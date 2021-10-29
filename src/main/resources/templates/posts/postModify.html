@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary m-2" onclick="save()">Save</button>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 m-1 form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" name="title" id="title" style="width:50%;" placeholder="Enter Title" th:value="${post.title}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm m-1">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <textarea class="form-control" name="content" id="content" rows="20" style="width:100%;" spellcheck="false" th:text="${post.content}"></textarea>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function save() {
+                var requestDTO = {
+                    "title" : $('#title').val(),
+                    "content" : $('#content').val(),
+                    "writer" : "admin"
+                }
+
+                console.log(requestDTO);
+
+                $.ajax({
+                    url : "/api/v1/posts/" + [[${post.pid}]],
+                    data : JSON.stringify(requestDTO),
+                    type : "PUT",
+                    dataType : 'json',
+                    contentType : 'application/json',
+                    success: function(result) {
+                        location.href="/posts/" + result.pid;
+                    },
+                    error : function(result) {
+                        alert("등록에 실패하였습니다.");
+                    }
+                });
+            }
+        </script>
+
+    </th:block>
+
+</th:block>
+
+</html>

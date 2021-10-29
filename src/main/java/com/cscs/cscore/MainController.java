@@ -17,6 +17,6 @@ public class MainController {
 
         model.addAttribute("scores", scoreService.findAll());
 
-        return "scores/list";
+        return "scores/scoreList";
     }
 }
