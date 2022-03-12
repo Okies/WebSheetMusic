@@ -1,6 +1,8 @@
 package com.cscs.cscore.controller;
 
+import com.cscs.cscore.dto.request.ScorePageRequestDTO;
 import com.cscs.cscore.dto.request.ScoreRequestDTO;
+import com.cscs.cscore.dto.response.ScorePageResponseDTO;
 import com.cscs.cscore.dto.response.ScoreResponseDTO;
 import com.cscs.cscore.dto.response.ScoresResponseDTO;
 import com.cscs.cscore.service.ScoreService;
@@ -20,9 +22,9 @@ public class ScoreController {
     private final ScoreService scoreService;
 
     @GetMapping({"", "/"})
-    public List<ScoresResponseDTO> getScores() {
+    public ScorePageResponseDTO getList(ScorePageRequestDTO requestDTO) {
 
-        return scoreService.findAll();
+        return scoreService.getList(requestDTO);
 
     }
 

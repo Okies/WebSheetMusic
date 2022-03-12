@@ -1,6 +1,8 @@
 package com.cscs.cscore.service;
 
+import com.cscs.cscore.dto.request.ScorePageRequestDTO;
 import com.cscs.cscore.dto.request.ScoreRequestDTO;
+import com.cscs.cscore.dto.response.ScorePageResponseDTO;
 import com.cscs.cscore.dto.response.ScoreResponseDTO;
 import com.cscs.cscore.dto.response.ScoresResponseDTO;
 import com.cscs.cscore.entity.Score;
@@ -9,6 +11,8 @@ import com.cscs.cscore.exception.ScoreNotFoundException;
 import com.cscs.cscore.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,18 @@ public class ScoreServiceImpl implements ScoreService{
         return scoreRepository.findAll(Sort.by(Sort.Direction.DESC, "sid")).stream()
                 .map(ScoresResponseDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ScorePageResponseDTO getList(ScorePageRequestDTO requestDTO) {
+
+        Pageable pageable = requestDTO.getPageble(Sort.by(Sort.Direction.DESC, "sid"));
+
+        Page<Score> scorePage = scoreRepository.findAll(pageable);
+
+        return ScorePageResponseDTO.builder()
+                .scorePage(scorePage)
+                .build();
     }
 
     @Override

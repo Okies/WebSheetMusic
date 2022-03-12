@@ -1,9 +1,11 @@
 package com.cscs.cscore.controller;
 
+import com.cscs.cscore.dto.request.ScorePageRequestDTO;
 import com.cscs.cscore.service.PostService;
 import com.cscs.cscore.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +19,10 @@ public class PageController {
     private final ScoreService scoreService;
     private final PostService postService;
 
-    @GetMapping({"scores", "scores/"})
-    public String getPageScoreList(Model model) {
+    @GetMapping({"", "/", "scores", "scores/"})
+    public String getPageScoreList(Model model, ScorePageRequestDTO requestDTO) {
 
-        model.addAttribute("scores", scoreService.findAll());
+        model.addAttribute("result", scoreService.getList(requestDTO));
 
         return "scores/scoreList";
     }
