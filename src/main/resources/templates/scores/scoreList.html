@@ -26,9 +26,11 @@
             <tbody>
             <tr th:each="dto : ${scores}">
                 <th scope="row">
-                    <a th:href="@{'scores/' + ${dto.sid}}">[[${dto.sid}]]</a>
+                    [[${dto.sid}]]
                 </th>
-                <td>[[${dto.title}]]</td>
+                <td>
+                    <a th:href="@{'scores/' + ${dto.sid}}" style="color: inherit;text-decoration: none">[[${dto.title}]]</a>
+                </td>
                 <td>[[${dto.writer}]]</td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
             </tr>

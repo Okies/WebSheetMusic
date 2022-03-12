@@ -1,10 +1,11 @@
 package com.cscs.cscore.service;
 
-import com.cscs.cscore.dto.ScoreDTO;
 import com.cscs.cscore.dto.request.ScoreRequestDTO;
 import com.cscs.cscore.dto.response.ScoreResponseDTO;
 import com.cscs.cscore.dto.response.ScoresResponseDTO;
 import com.cscs.cscore.entity.Score;
+import com.cscs.cscore.exception.CommonErrorCode;
+import com.cscs.cscore.exception.ScoreNotFoundException;
 import com.cscs.cscore.repository.ScoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +32,7 @@ public class ScoreServiceImpl implements ScoreService{
     @Override
     public ScoreResponseDTO findById(Long sid) {
 
-        Score score = scoreRepository.findById(sid).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. " + sid));
+        Score score = scoreRepository.findById(sid).orElseThrow(() -> new ScoreNotFoundException(CommonErrorCode.SCORES_NOT_FOUND));
 
         return ScoreResponseDTO.builder()
                 .entity(score)
@@ -48,7 +49,7 @@ public class ScoreServiceImpl implements ScoreService{
     @Override
     public ScoreResponseDTO update(Long sid, ScoreRequestDTO dto) {
 
-        Score score = scoreRepository.findById(sid).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다." + sid));
+        Score score = scoreRepository.findById(sid).orElseThrow(() -> new ScoreNotFoundException(CommonErrorCode.SCORES_NOT_FOUND));
 
         score.update(dto.getTitle(), dto.getNotation(), dto.getWriter());
 

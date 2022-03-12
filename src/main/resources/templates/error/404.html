@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+
+        <h1>Page Not Found!</h1>
+        <p th:text="${'path: ' + path}"></p>
+        <p th:text="${'status: ' + status}"></p>
+        <p th:text="${'timestamp: ' + timestamp}"></p>
+        <p th:text="${'error: ' + error}"></p>
+<!--        <p th:text="${'errors: ' + errors}"></p>-->
+<!--        <p th:text="${'exception: ' + exception}"></p>-->
+<!--        <p th:text="${'message: ' + message}"></p>-->
+<!--        <p th:text="${'trace: ' + trace}"></p>-->
+
+    </th:block>
+
+</th:block>
+
+</html>

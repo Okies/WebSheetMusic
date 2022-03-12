@@ -2,6 +2,7 @@ package com.cscs.cscore.controller;
 
 import com.cscs.cscore.dto.request.PostRequestDTO;
 import com.cscs.cscore.dto.request.ScoreRequestDTO;
+import com.cscs.cscore.dto.response.CustomResponse;
 import com.cscs.cscore.dto.response.PostResponseDTO;
 import com.cscs.cscore.dto.response.PostsResponseDTO;
 import com.cscs.cscore.dto.response.ScoreResponseDTO;
@@ -35,6 +36,11 @@ public class PostsController {
 
         return postService.findById(pid);
     }
+//    CustomResponse.<PostResponseDTO>builder()
+//                .data(postService.findById(pid))
+//                .status(200)
+//                .message("정상처리")
+//                .build()
 
     @PostMapping()
     @ResponseBody

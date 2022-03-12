@@ -18,6 +18,8 @@ spring:
   profiles:
     group:
       "local": "dev-db"
+  thymeleaf:
+    cache: false
   jpa:
     show-sql: true
     database: mysql
