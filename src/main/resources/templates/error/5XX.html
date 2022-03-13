@@ -5,15 +5,14 @@
 
     <th:block th:fragment="content">
 
-        <h1>Page Not Found!</h1>
+        <h1 th:text="${'error: ' + error}"></h1>
         <p th:text="${'path: ' + path}"></p>
         <p th:text="${'status: ' + status}"></p>
         <p th:text="${'timestamp: ' + timestamp}"></p>
-        <p th:text="${'error: ' + error}"></p>
-<!--        <p th:text="${'errors: ' + errors}"></p>-->
-<!--        <p th:text="${'exception: ' + exception}"></p>-->
-<!--        <p th:text="${'message: ' + message}"></p>-->
-<!--        <p th:text="${'trace: ' + trace}"></p>-->
+        <!--        <p th:text="${'errors: ' + errors}"></p>-->
+        <!--        <p th:text="${'exception: ' + exception}"></p>-->
+        <!--        <p th:text="${'message: ' + message}"></p>-->
+        <!--        <p th:text="${'trace: ' + trace}"></p>-->
 
     </th:block>
 

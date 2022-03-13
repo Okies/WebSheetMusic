@@ -5,10 +5,13 @@ import com.cscs.cscore.dto.request.ScoreRequestDTO;
 import com.cscs.cscore.dto.response.ScorePageResponseDTO;
 import com.cscs.cscore.dto.response.ScoreResponseDTO;
 import com.cscs.cscore.dto.response.ScoresResponseDTO;
+import com.cscs.cscore.entity.QScore;
 import com.cscs.cscore.entity.Score;
 import com.cscs.cscore.exception.CommonErrorCode;
 import com.cscs.cscore.exception.ScoreNotFoundException;
 import com.cscs.cscore.repository.ScoreRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -38,7 +41,9 @@ public class ScoreServiceImpl implements ScoreService{
 
         Pageable pageable = requestDTO.getPageble(Sort.by(Sort.Direction.DESC, "sid"));
 
-        Page<Score> scorePage = scoreRepository.findAll(pageable);
+        BooleanBuilder booleanBuilder = getSearch(requestDTO);
+
+        Page<Score> scorePage = scoreRepository.findAll(booleanBuilder, pageable);
 
         return ScorePageResponseDTO.builder()
                 .scorePage(scorePage)
@@ -72,5 +77,35 @@ public class ScoreServiceImpl implements ScoreService{
         return ScoreResponseDTO.builder()
                 .entity(scoreRepository.save(score))
                 .build();
+    }
+
+    private BooleanBuilder getSearch(ScorePageRequestDTO requestDTO) {
+
+        String type = requestDTO.getType();
+        String keyword = requestDTO.getKeyword();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        QScore qScore = QScore.score;
+
+        BooleanExpression expression = qScore.sid.gt(0L);
+        booleanBuilder.and(expression);
+
+        if(type == null || type.trim().length() == 0) {
+            return booleanBuilder;
+        }
+
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        if(type.contains("t")) {
+            conditionBuilder.or(qScore.title.contains(keyword));
+        }
+        if(type.contains("w")) {
+            conditionBuilder.or(qScore.writer.contains(keyword));
+        }
+
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
     }
 }

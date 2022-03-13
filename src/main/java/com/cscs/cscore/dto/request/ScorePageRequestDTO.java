@@ -14,6 +14,8 @@ public class ScorePageRequestDTO {
 
     private int page;
     private int size;
+    private String type;
+    private String keyword;
 
     public ScorePageRequestDTO() {
         this.page = 1;

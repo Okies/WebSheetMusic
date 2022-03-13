@@ -5,13 +5,24 @@
 
     <th:block th:fragment="content">
 
-        <h1 class="mt-4">
-            <span>
-                <a th:href="@{scores/new}">
-                    <button type="button" class="btn btn-outline-primary">REGISTER</button>
-                </a>
-            </span>
-        </h1>
+        <h1>Scores</h1>
+
+        <form action="scores" method="get" id="searchForm">
+            <div class="input-group">
+                <input type="hidden" name="page" value="1">
+                <div class="input-group-prepend">
+                    <select class="custom-select" name="type">
+                        <option value="t" th:selected="${scorePageRequestDTO.type == 't' || scorePageRequestDTO == null}">제목</option>
+                        <option value="w" th:selected="${scorePageRequestDTO.type == 'w'}">작곡가</option>
+                    </select>
+                </div>
+                <input class="form-control" name="keyword" th:value="${scorePageRequestDTO.keyword}">
+                <div class="input-group-append" id="button-addon4">
+                    <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+                    <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+                </div>
+            </div>
+        </form>
 
         <table class="table table-striped">
             <thead>
@@ -53,6 +64,34 @@
                 <a class="page-link" th:href="@{scores(page=${result.end + 1})}">Next</a>
             </li>
         </ul>
+
+        <div class="d-flex justify-content-end">
+            <a th:href="@{scores/new}">
+                <button type="button" class="btn btn-outline-primary">REGISTER</button>
+            </a>
+        </div>
+
+        <script th:inline="javascript">
+
+            var msg = [[${msg}]];
+
+            console.log(msg);
+
+            if(msg) {
+                $(".modal").modal();
+            }
+
+            var searchForm = $("#searchForm");
+
+            $('.btn-search').click(function(e) {
+                searchForm.submit();
+            });
+
+            $('.btn-clear').click(function(e) {
+                searchForm.empty().submit();
+            });
+
+        </script>
 
     </th:block>
 
